@@ -8,5 +8,6 @@ router.get('/publisher', magazineController.getPublishers)
 router.post('/create', magazineController.createMagazine)
 router.delete('/delete/:id', magazineController.deleteMagazine)
 router.put('/update/:id', magazineController.updateMagazine)
+router.get('/average/theme', magazineController.getAveragePrice)
 
 module.exports = router

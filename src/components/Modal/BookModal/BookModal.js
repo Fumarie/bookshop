@@ -10,7 +10,7 @@ const BookModal = (props) => {
     useEffect(() => {
         dispatch(getAllGenres())
         dispatch(getAllAuthors())
-        dispatch(getAllPublishers())
+        dispatch(getAllPublishers()) // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const {modalType, editItem} = useSelector(state => state.modal)

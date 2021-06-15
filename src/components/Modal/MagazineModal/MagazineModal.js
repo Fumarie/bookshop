@@ -3,7 +3,6 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
     createMagazine,
-    getAllMagazines,
     getAllPublishers,
     getAllThemes,
     updateMagazine
@@ -14,7 +13,7 @@ const MagazineModal = (props) => {
 
     useEffect(() => {
         dispatch(getAllThemes())
-        dispatch(getAllPublishers())
+        dispatch(getAllPublishers()) // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const {modalType, editItem} = useSelector(state => state.modal)

@@ -155,6 +155,28 @@ class BookController {
             res.status(400).json({message: 'Error updating book'})
         }
     }
+
+    getAveragePrice (req, res) {
+        const { genre } = req.query
+        console.log(genre)
+        if(!genre) return res.json(0)
+        try {
+            db.query(`SELECT AVG(price) as price from product
+            JOIN books ON id_books = id_product
+            JOIN book_to_genre ON id_books = id_book
+            JOIN genre ON book_to_genre.id_genre = genre.id_genre
+            where genre.name like \'${genre}\'`, function (err, results, fields) {
+                if (err) {
+                    console.log(err)
+                    return res.json(err)
+                }
+                res.json(results[0].price)
+            })
+        } catch (e) {
+            console.log(e)
+            res.status(400).json({message: 'Error getting average price'})
+        }
+    }
 }
 
 module.exports = new BookController()

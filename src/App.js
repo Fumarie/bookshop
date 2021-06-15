@@ -11,6 +11,7 @@ function App() {
                 <NavbarComponent/>
                 <Route path="/magazines" exact component={MagazinesPage} />
                 <Route path="/books" exact component={BooksPage} />
+                <Redirect to="/magazines" />
             </BrowserRouter>
         </div>
     );

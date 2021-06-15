@@ -5,6 +5,7 @@ const initialState = {
     magazines: [],
     publishers: [],
     themes: [],
+    avgPrice: 0
 }
 
 export const getAllMagazines = createAsyncThunk(
@@ -60,6 +61,17 @@ export const updateMagazine = createAsyncThunk(
     }
 )
 
+export const getAveragePrice = createAsyncThunk(
+    'magazine/averagePrice',
+    async (theme,thunkAPI)  => {
+        console.log(theme)
+        const response = await axios.get(`http://localhost:7070/api/magazine/average/theme?theme=${theme}`)
+        console.log(response.data)
+        return response.data
+    }
+)
+
+
 export const magazineSlice = createSlice({
     name: 'magazine',
     initialState,
@@ -74,6 +86,9 @@ export const magazineSlice = createSlice({
             })
             .addCase(getAllPublishers.fulfilled, (state, action) => {
                 state.publishers = action.payload
+            })
+            .addCase(getAveragePrice.fulfilled, (state, action) => {
+                state.avgPrice = action.payload
             })
     },
 })

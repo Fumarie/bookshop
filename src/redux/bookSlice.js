@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from "axios"
-import { getAllMagazines } from "./magazineSlice";
 
 const initialState = {
     books: [],
     publishers: [],
     genres: [],
-    authors: []
+    authors: [],
+    avgPrice: 0
 }
 
 export const getAllBooks = createAsyncThunk(
@@ -57,7 +57,14 @@ export const updateBook = createAsyncThunk(
     }
 )
 
-
+export const getAveragePrice = createAsyncThunk(
+    'book/averagePrice',
+    async (genre,thunkAPI)  => {
+        const response = await axios.get(`http://localhost:7070/api/book/average/genre?genre=${genre}`)
+        console.log(response.data)
+        return response.data
+    }
+)
 
 export const bookSlice = createSlice({
     name: 'book',
@@ -73,6 +80,9 @@ export const bookSlice = createSlice({
             })
             .addCase(getAllAuthors.fulfilled, (state, action) => {
                 state.authors = action.payload
+            })
+            .addCase(getAveragePrice.fulfilled, (state, action) => {
+                state.avgPrice = action.payload
             })
     },
 })

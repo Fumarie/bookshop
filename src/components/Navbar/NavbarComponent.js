@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Form, FormControl, Nav, Navbar } from "react-bootstrap";
+import React from 'react';
+import {  Nav, Navbar } from "react-bootstrap";
 import { NavLink } from 'react-router-dom'
 
 const NavbarComponent = () => {
     return (
         <Navbar bg="light" variant="light" style={{justifyContent: 'center'}}>
-            <Navbar.Brand href="#home">Bookshop</Navbar.Brand>
+            <Navbar.Brand>Bookshop</Navbar.Brand>
             <Nav className="mr-auto">
                 <NavLink to='/magazines' style={{marginRight: 10, textDecoration: 'none', color: 'gray'}}  activeStyle={{
                     fontWeight: "bold",
