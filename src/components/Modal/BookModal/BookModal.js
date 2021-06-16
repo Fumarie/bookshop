@@ -28,9 +28,10 @@ const BookModal = (props) => {
     })
 
     const validate = () => {
-        const year = new Date(createData.year).getFullYear()
+        const year = Number(createData.year)
+        if(year < 0) return false
         const yearNow = new Date().getFullYear()
-        return year <= yearNow && createData.year.length && createData.name.length && createData.price.length && createData.publisher.length && createData.author.length && createData.genre.length && createData.vendorCode.length
+        return year <= yearNow && year > 0 && createData.year.length && createData.name.length && createData.price.length && createData.publisher.length && createData.author.length && createData.genre.length && createData.vendorCode.length
     }
 
     const changeHandler = event => {

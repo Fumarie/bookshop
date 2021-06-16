@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ModalWindow from "../../components/Modal/ModalWindow";
-import { Button, Form, FormControl, InputGroup, Table } from "react-bootstrap";
+import { Button, Form, InputGroup, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setEditItem, setModal, setModalPage, setModalType } from "../../redux/modalSlice";
 import { deleteBook, getAllBooks, getAllGenres, getAveragePrice } from "../../redux/bookSlice";
