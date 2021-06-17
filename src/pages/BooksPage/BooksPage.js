@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalWindow from "../../components/Modal/ModalWindow";
 import { Button, Form, InputGroup, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ const BooksPage = () => {
     useEffect(() => {
         dispatch(getAllBooks())
         dispatch(getAllGenres()) // eslint-disable-next-line react-hooks/exhaustive-deps
+        dispatch(getAveragePrice())
     }, []);
 
 

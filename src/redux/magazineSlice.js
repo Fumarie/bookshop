@@ -64,6 +64,7 @@ export const updateMagazine = createAsyncThunk(
 export const getAveragePrice = createAsyncThunk(
     'magazine/averagePrice',
     async (theme,thunkAPI)  => {
+        if(!theme) return 0
         console.log(theme)
         const response = await axios.get(`http://localhost:7070/api/magazine/average/theme?theme=${theme}`)
         console.log(response.data)

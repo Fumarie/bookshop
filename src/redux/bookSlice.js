@@ -60,6 +60,7 @@ export const updateBook = createAsyncThunk(
 export const getAveragePrice = createAsyncThunk(
     'book/averagePrice',
     async (genre,thunkAPI)  => {
+        if(!genre) return 0
         const response = await axios.get(`http://localhost:7070/api/book/average/genre?genre=${genre}`)
         console.log(response.data)
         return response.data
