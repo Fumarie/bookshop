@@ -17,14 +17,14 @@ const MagazineModal = (props) => {
     }, []);
 
     const {modalType, editItem} = useSelector(state => state.modal)
-    const {themes, publishers} = useSelector(state => state.magazine)
+    const {themes, publishers, magazines} = useSelector(state => state.magazine)
 
     const [createData, setCreateData] = useState({
-        name: "",
-        price: "",
-        publisher: "",
-        theme: "",
-        vendorCode: ""
+        name: modalType === 0 ? "" : magazines.find(magazine => magazine.id === editItem).name,
+        price: modalType === 0 ? "" : magazines.find(magazine => magazine.id === editItem).price.toString(),
+        publisher: modalType === 0 ? "" : magazines.find(magazine => magazine.id === editItem).publisher,
+        theme: modalType === 0 ? "" : magazines.find(magazine => magazine.id === editItem).theme,
+        vendorCode: modalType === 0 ? "" : magazines.find(magazine => magazine.id === editItem).vendorCode
     })
 
 
@@ -38,13 +38,6 @@ const MagazineModal = (props) => {
 
     const onClose = () => {
         props.onHide()
-        setCreateData({
-            name: "",
-            price: "",
-            publisher: "",
-            theme: "",
-            vendorCode: ""
-        })
     }
 
     const submitHandler = event => {
@@ -97,6 +90,7 @@ const MagazineModal = (props) => {
                             autoFocus
                             type="text"
                             onChange={changeHandler}
+                            value={createData.theme}
                         >
                             <option></option>
                             {themes.map((elem, index) => <option key={index}>{elem.theme}</option>)}
@@ -109,6 +103,7 @@ const MagazineModal = (props) => {
                             name="publisher"
                             type="text"
                             onChange={changeHandler}
+                            value={createData.publisher}
                         >
                             <option></option>
                             {publishers.map((elem, index) => <option key={index}>{elem.publisher}</option>)}
@@ -116,7 +111,7 @@ const MagazineModal = (props) => {
                     </Form.Group>
                     <Form.Group size="lg" controlId="price">
                         <Form.Label>Price</Form.Label>
-                        <Form.Control name="price" type="number" onChange={changeHandler}/>
+                        <Form.Control name="price" type="number" onChange={changeHandler} value={createData.price}/>
                     </Form.Group>
                     {modalType === 0 ? <Button variant="info" block size="lg" type="submit" disabled={!validate()}>
                             Create

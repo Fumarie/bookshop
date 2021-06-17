@@ -61,17 +61,17 @@ class MagazineController {
         try {
             const {name, price, publisherId, themeId, vendorCode} = req.body
             console.log(req.body)
-            db.query(`INSERT INTO product (vendor_code, product_type, name, price) VALUES(\'${vendorCode}'\, 0, \'${name}\', ${price});`, function (err, results, fields) {
+            db.query(`INSERT INTO product (vendor_code, product_type, name, price) VALUES(?, 0, ?, ?);`, [vendorCode, name, price], function (err, results, fields) {
                 if (err) {
                     console.log(err)
                     return res.json(err)
                 }
-                db.query(`INSERT INTO magazines (id_magazines, issue_number, publishing_house_id) VALUES(LAST_INSERT_ID(), 1999, ${publisherId});`, function (err, results, fields) {
+                db.query(`INSERT INTO magazines (id_magazines, issue_number, publishing_house_id) VALUES(LAST_INSERT_ID(), 1999, ?);`, [publisherId], function (err, results, fields) {
                     if (err) {
                         console.log(err)
                         return res.json(err)
                     }
-                    db.query(`INSERT INTO magazine_to_theme (id_magazine, id_theme) VALUES (LAST_INSERT_ID(), ${themeId})`, function (err, results, fields) {
+                    db.query(`INSERT INTO magazine_to_theme (id_magazine, id_theme) VALUES (LAST_INSERT_ID(), ?)`, [themeId], function (err, results, fields) {
                         if (err) {
                             console.log(err)
                             return res.json(err)
@@ -89,7 +89,7 @@ class MagazineController {
     deleteMagazine(req, res) {
         try {
             const id = req.params.id
-            db.query(`DELETE from product where id_product = ${id}`, function (err, results, fields) {
+            db.query(`DELETE from product where id_product = ?`, [id], function (err, results, fields) {
                 if (err) {
                     console.log(err)
                     return res.json(err)
@@ -106,17 +106,18 @@ class MagazineController {
         try {
             const id = req.params.id
             const {name, price, publisherId, themeId, vendorCode} = req.body
-            db.query(`UPDATE product set vendor_code = \'${vendorCode}'\, product_type = 0, name = \'${name}\', price = ${price} where id_product = ${id};`, function (err, results, fields) {
+            db.query(`UPDATE product set vendor_code = ?, product_type = 0, name = ?, price = ? where id_product = ?;`, [vendorCode, name, price, id],
+                function (err, results, fields) {
                 if (err) {
                     console.log(err)
                     return res.json(err)
                 }
-                db.query(`UPDATE magazines set publishing_house_id = ${publisherId} where id_magazines = ${id};`, function (err, results, fields) {
+                db.query(`UPDATE magazines set publishing_house_id = ? where id_magazines = ?;`, [publisherId, id], function (err, results, fields) {
                     if (err) {
                         console.log(err)
                         return res.json(err)
                     }
-                    db.query(`UPDATE magazine_to_theme set id_theme = ${themeId} where id_magazine = ${id}`, function (err, results, fields) {
+                    db.query(`UPDATE magazine_to_theme set id_theme = ? where id_magazine = ?`, [themeId, id], function (err, results, fields) {
                         if (err) {
                             console.log(err)
                             return res.json(err)
@@ -133,14 +134,13 @@ class MagazineController {
 
     getAveragePrice(req, res) {
         const {theme} = req.query
-        console.log(theme)
         if (!theme) return res.json(0)
         try {
             db.query(`SELECT AVG(price) as price from product
                             JOIN magazines ON product.id_product = magazines.id_magazines
                             JOIN magazine_to_theme ON magazines.id_magazines = magazine_to_theme.id_magazine
                             JOIN theme ON magazine_to_theme.id_theme = theme.id_theme
-                            where theme.name like \'${theme}\'`, function (err, results, fields) {
+                            where theme.name like ?`, [theme], function (err, results, fields) {
                 if (err) {
                     console.log(err)
                     return res.json(err)

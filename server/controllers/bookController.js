@@ -64,25 +64,25 @@ class BookController {
         try {
             const {name, price, publisherId, genreId, authorId, vendorCode, year} = req.body
             console.log(req.body)
-            db.query(`INSERT INTO product (vendor_code, product_type, name, price) VALUES(\'${vendorCode}'\, 1, \'${name}\', ${price});`, function (err, results, fields) {
+            db.query(`INSERT INTO product (vendor_code, product_type, name, price) VALUES(?, 1, ?, ?);`,[vendorCode, name, price], function (err, results, fields) {
                 if (err) {
                     console.log(err)
                     return res.json(err)
                 }
                 console.log('1 done')
-                db.query(`INSERT INTO books (id_books, year_of_writing, publishing_house_id) VALUES (LAST_INSERT_ID(), ${year}, ${publisherId});`, function (err, results, fields) {
+                db.query(`INSERT INTO books (id_books, year_of_writing, publishing_house_id) VALUES (LAST_INSERT_ID(), ?, ?);`, [year, publisherId], function (err, results, fields) {
                     if (err) {
                         console.log(err)
                         return res.json(err)
                     }
                     console.log('2 done')
-                    db.query(`INSERT INTO book_to_genre (id_book, id_genre) VALUES (LAST_INSERT_ID(), ${genreId});`, function (err, results, fields) {
+                    db.query(`INSERT INTO book_to_genre (id_book, id_genre) VALUES (LAST_INSERT_ID(), ?);`, [genreId], function (err, results, fields) {
                         if (err) {
                             console.log(err)
                             return res.json(err)
                         }
                         console.log('3 done')
-                        db.query(`INSERT INTO book_to_author (id_book, id_author) VALUES (LAST_INSERT_ID(), ${authorId});`, function (err, results, fields) {
+                        db.query(`INSERT INTO book_to_author (id_book, id_author) VALUES (LAST_INSERT_ID(), ?);`, [authorId], function (err, results, fields) {
                             if (err) {
                                 console.log(err)
                                 return res.json(err)
@@ -102,7 +102,7 @@ class BookController {
     deleteBook (req, res) {
         try {
             const id = req.params.id
-            db.query(`DELETE from product where id_product = ${id}`, function (err, results, fields) {
+            db.query(`DELETE from product where id_product = ?`,[id], function (err, results, fields) {
                 if (err) {
                     console.log(err)
                     return res.json(err)
@@ -120,25 +120,25 @@ class BookController {
             const id = req.params.id
             const {name, price, publisherId, genreId, authorId, vendorCode, year} = req.body
             console.log(req.body)
-            db.query(`UPDATE product set vendor_code = \'${vendorCode}'\, product_type = 1, name = \'${name} \', price = ${price} where id_product = ${id};`, function (err, results, fields) {
+            db.query('UPDATE product set vendor_code = ?, product_type = 1, name = ?, price = ? where id_product = ?;', [vendorCode, name, price, id], function (err, results, fields) {
                 if (err) {
                     console.log(err)
                     return res.json(err)
                 }
                 console.log('1 done')
-                db.query(`UPDATE books set year_of_writing = ${year}, publishing_house_id = ${publisherId} where id_books = ${id};`, function (err, results, fields) {
+                db.query(`UPDATE books set year_of_writing = ?, publishing_house_id = ? where id_books = ?;`,[year, publisherId, id], function (err, results, fields) {
                     if (err) {
                         console.log(err)
                         return res.json(err)
                     }
                     console.log('2 done')
-                    db.query(`UPDATE book_to_genre set id_genre = ${genreId} where id_book = ${id};`, function (err, results, fields) {
+                    db.query(`UPDATE book_to_genre set id_genre = ? where id_book = ?;`,[genreId, id], function (err, results, fields) {
                         if (err) {
                             console.log(err)
                             return res.json(err)
                         }
                         console.log('3 done')
-                        db.query(`UPDATE book_to_author set id_author = ${authorId} where id_book = ${id};`, function (err, results, fields) {
+                        db.query(`UPDATE book_to_author set id_author = ? where id_book = ?;`,[authorId, id], function (err, results, fields) {
                             if (err) {
                                 console.log(err)
                                 return res.json(err)
@@ -161,11 +161,8 @@ class BookController {
         console.log(genre)
         if(!genre) return res.json(0)
         try {
-            db.query(`SELECT AVG(price) as price from product
-            JOIN books ON id_books = id_product
-            JOIN book_to_genre ON id_books = id_book
-            JOIN genre ON book_to_genre.id_genre = genre.id_genre
-            where genre.name like \'${genre}\'`, function (err, results, fields) {
+            db.query(`SELECT AVG(price) as price from product JOIN books ON id_books = id_product JOIN book_to_genre ON id_books = id_book JOIN genre ON book_to_genre.id_genre = genre.id_genre where genre.name like ?`, [genre],
+                function (err, results, fields) {
                 if (err) {
                     console.log(err)
                     return res.json(err)

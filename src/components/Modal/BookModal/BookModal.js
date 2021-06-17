@@ -16,15 +16,16 @@ const BookModal = (props) => {
     const {modalType, editItem} = useSelector(state => state.modal)
     const {genres, authors} = useSelector(state => state.book)
     const {publishers} = useSelector(state => state.magazine)
+    const {books} = useSelector(state => state.book)
 
     const [createData, setCreateData] = useState({
-        name: "",
-        price: "",
-        publisher: "",
-        author: "",
-        genre: "",
-        vendorCode: "",
-        year: ""
+        name: modalType === 0 ? "" : books.find(magazine => magazine.id === editItem).name,
+        price: modalType === 0 ? "" : books.find(magazine => magazine.id === editItem).price.toString(),
+        publisher: modalType === 0 ? "" : books.find(magazine => magazine.id === editItem).publisher,
+        author: modalType === 0 ? "" : books.find(magazine => magazine.id === editItem).author,
+        genre: modalType === 0 ? "" : books.find(magazine => magazine.id === editItem).genre,
+        vendorCode: modalType === 0 ? "" : books.find(magazine => magazine.id === editItem).vendorCode,
+        year: modalType === 0 ? "" : books.find(magazine => magazine.id === editItem).writingYear.toString(),
     })
 
     const validate = () => {
@@ -41,15 +42,6 @@ const BookModal = (props) => {
 
     const onClose = () => {
         props.onHide()
-        setCreateData({
-            name: "",
-            price: "",
-            publisher: "",
-            author: "",
-            genre: "",
-            vendorCode: "",
-            year: ""
-        })
     }
 
     const submitHandler = event => {
@@ -112,6 +104,7 @@ const BookModal = (props) => {
                             autoFocus
                             type="text"
                             onChange={changeHandler}
+                            value={createData.genre}
                         >
                             <option></option>
                             {genres.map((elem, index) => <option key={index}>{elem.genre}</option>)}
@@ -124,6 +117,7 @@ const BookModal = (props) => {
                             name="publisher"
                             type="text"
                             onChange={changeHandler}
+                            value={createData.publisher}
                         >
                             <option></option>
                             {publishers.map((elem, index) => <option key={index}>{elem.publisher}</option>)}
@@ -136,18 +130,19 @@ const BookModal = (props) => {
                             name="author"
                             type="text"
                             onChange={changeHandler}
+                            value={createData.author}
                         >
                             <option></option>
                             {authors.map((elem, index) => <option key={index}>{elem.author}</option>)}
                         </Form.Control>
                     </Form.Group>
-                    <Form.Group size="lg" controlId="Year">
+                    <Form.Group size="lg" controlId="year">
                         <Form.Label>Year</Form.Label>
-                        <Form.Control name="year" type="number" onChange={changeHandler}/>
+                        <Form.Control name="year" type="number" onChange={changeHandler} value={createData.year}/>
                     </Form.Group>
                     <Form.Group size="lg" controlId="price">
                         <Form.Label>Price</Form.Label>
-                        <Form.Control name="price" type="number" onChange={changeHandler}/>
+                        <Form.Control name="price" type="number" onChange={changeHandler} value={createData.price}/>
                     </Form.Group>
                     {modalType === 0 ? <Button variant="info" block size="lg" type="submit" disabled={!validate()}>
                             Create
